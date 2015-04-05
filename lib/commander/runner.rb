@@ -292,10 +292,7 @@ module Commander
 
     def create_default_commands
       command :help do |c|
-        c.syntax = 'commander help [command]'
-        c.description = 'Display global or [command] help documentation'
-        c.example 'Display global help', 'command help'
-        c.example "Display help for 'foo'", 'command help foo'
+        create_default_commands_output(c)
         c.when_called do |args, _options|
           UI.enable_paging
           if args.empty?
@@ -311,6 +308,16 @@ module Commander
           end
         end
       end
+    end
+
+    ##
+    # syntax, description and examples for create_default_commands
+
+    def create_default_commands_output(command)
+      command.syntax = 'commander help [command]'
+      command.description = 'Display global or [command] help documentation'
+      command.example 'Display global help', 'command help'
+      command.example "Display help for 'foo'", 'command help foo'
     end
 
     ##
