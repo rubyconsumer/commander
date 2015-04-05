@@ -295,17 +295,7 @@ module Commander
         create_default_commands_output(c)
         c.when_called do |args, _options|
           UI.enable_paging
-          if args.empty?
-            say help_formatter.render
-          else
-            command = command args.join(' ')
-            begin
-              require_valid_command command
-            rescue InvalidCommandError => e
-              abort "#{e}. Use --help for more information"
-            end
-            say help_formatter.render_command(command)
-          end
+          create_default_commands_args_processing(args)
         end
       end
     end
@@ -318,6 +308,23 @@ module Commander
       command.description = 'Display global or [command] help documentation'
       command.example 'Display global help', 'command help'
       command.example "Display help for 'foo'", 'command help foo'
+    end
+
+    ##
+    # create_default_commands argments processing
+
+    def create_default_commands_args_processing(args)
+      if args.empty?
+        say help_formatter.render
+      else
+        command = command args.join(' ')
+        begin
+          require_valid_command command
+        rescue InvalidCommandError => e
+          abort "#{e}. Use --help for more information"
+        end
+        say help_formatter.render_command(command)
+      end
     end
 
     ##
